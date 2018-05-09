@@ -1,0 +1,121 @@
+<html>
+<head>
+<title>Open House Sign In</title>
+<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+<img src="./img/KRE-RD-1280x320.png" alt="" class="logo" />
+<h1>Open House Sign In</h1>
+<div id="app"></div>
+<script>
+const ipcRenderer = require('electron').ipcRenderer;
+
+var data = {};
+var steps = [];
+var appEl = document.getElementById('app');
+
+fetch('json/steps.json').then(function(response) {
+  return response.json();
+}).then(function(json) {
+  steps = json.steps;
+  makeStep(0);
+});
+
+function makeStep(num) {
+  var step = steps[num];
+
+  appEl.innerHTML = '';
+
+  // Create wrapper
+  var stepEl = document.createElement('DIV');
+  stepEl.className = 'sheet';
+  stepEl.id = step.id;
+  appEl.appendChild(stepEl);
+
+  // Create fields
+  var first = true;
+  step.fields.forEach(function(field) {
+    if ( field.label && field.name && field.type ) {
+      var labelEl = document.createElement('LABEL');
+      labelEl.htmlFor = field.name;
+      labelEl.innerHTML = field.label + '<br/>';
+      var fieldEl = document.createElement('INPUT');
+      fieldEl.id = fieldEl.name = field.name;
+      fieldEl.type = field.type;
+      if (data[field.name]) {
+        fieldEl.value = data[field.name];
+      }
+      fieldEl.addEventListener('input', function() {
+        var valid = validate(field.type, this.value);
+        if (!valid) {
+          labelEl.style.color = 'red';
+        } else {
+          labelEl.style.color = '';
+	  data[field.name] = this.value;
+        }
+      });
+      labelEl.appendChild(fieldEl);
+      stepEl.appendChild(labelEl);
+      if (first) {
+        fieldEl.focus();
+        first = false;
+      }
+    }
+  });
+
+  // Create forward button
+  var buttonEl = document.createElement('BUTTON');
+  buttonEl.innerHTML = step.forward;
+  buttonEl.addEventListener('click', function() {
+    if (++num < steps.length) {
+      makeStep(num);
+    } else {
+      finish();
+    }
+  });
+  stepEl.appendChild(buttonEl);
+
+  // Create back link
+  var backEl = document.createElement('DIV');
+  backEl.className = 'back';
+  backEl.innerHTML = '&larr; Back';
+  backEl.addEventListener('click', function() {
+    if ((num - 1) >= 0) {
+      makeStep(--num);
+    }
+  });
+  stepEl.appendChild(backEl);
+}
+
+function validate(type, value) {
+  switch (type) {
+    case 'tel':
+      var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+      return re.test(value);
+      break;
+    case 'email':
+      var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(value);
+      break;
+    default:
+      return true;
+      break;
+  }
+}
+
+
+function finish() {
+  ipcRenderer.send('data-save', JSON.stringify(data));
+
+  appEl.innerHTML = '<div class="sheet" id="step6"><h2>Thanks! You\'re all set.</h2><img src="./img/giphy.webp" alt="" class="thanks" /></div>';
+
+  setTimeout(reset, 3000);
+}
+
+function reset() {
+  data = {};
+  makeStep(0);
+}
+</script>
+</body>
+</html>

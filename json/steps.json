@@ -1,0 +1,37 @@
+{
+  "steps": [
+    {
+      "id": "step1",
+      "forward": "Next &rarr;",
+      "fields": [
+        {
+          "name": "fullName",
+          "label": "Full Name",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "id": "step2",
+      "forward": "Next &rarr;",
+      "fields": [
+        {
+          "name": "emailAddress",
+          "label": "Email Address",
+          "type": "email"
+        }
+      ]
+    },
+    {
+      "id": "step3",
+      "forward": "Next &rarr;",
+      "fields": [
+        {
+          "name": "phoneNumber",
+          "label": "Phone Number",
+          "type": "tel"
+        }
+      ]
+    }
+  ]
+}

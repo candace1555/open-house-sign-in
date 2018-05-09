@@ -1,0 +1,65 @@
+h1 {
+  display: none;
+  text-align: center;
+  font-family: impact;
+}
+
+img.logo {
+  margin: auto;
+  display: block;
+  max-width: 640px;
+  margin-top: 3em;
+  margin-bottom: 3em;
+}
+
+.sheet {
+  text-align: center;
+}
+
+.sheet label {
+  color: #182f58;
+  display: block;
+  font-size: 2em;
+  margin-bottom: 1em;
+  font-family: "Helvetica", "Arial";
+}
+
+.sheet input {
+  font-size: 2em;
+  outline-color: #182f58;
+}
+
+.sheet button {
+  color: white;
+  padding: 0.5em;
+  cursor: pointer;
+  font-size: 1.5em;
+  border-radius: 4px;
+  background: #0f6a5c;
+  outline-color: #182f58;
+}
+
+#isNotWorkingWith {
+  margin-top: 1em;
+  background-color: #182f58;
+}
+
+.sheet input,
+.sheet button {
+  width: 600px;
+}
+
+img.thanks {
+  max-width: 300px;
+}
+
+.back {
+  width: 600px;
+  margin: auto;
+  margin-top: 1em;
+  cursor: pointer;
+  color: lightgray;
+  text-align: left;
+  text-decoration: underline;
+  font-family: "Helvetica", "Arial";
+}
